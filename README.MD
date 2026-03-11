@@ -1,11 +1,9 @@
-KY NANG NGHE CNTT 
+KY NANG NGHE CNTT
 
 - Nguyen Thanh Phuc
-- Luong Trieu Vi 
+- Luong Trieu Vi
 - Luu Quoc Thai
-- Duong Van Qui 
-- Truong Thanh Thong 
+- Duong Van Qui
+- Truong Thanh Thong
 - Vo Anh Nghia
 - Vo Du Thanh Tu
-
-
