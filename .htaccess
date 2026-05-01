@@ -1,0 +1,15 @@
+#Don't modify anything here
+php_flag display_errors on
+
+RewriteEngine on
+
+RewriteRule ^public - [L]
+
+RewriteRule ^([^/]+)/([^/]+)/([1-9][0-9]*) index.php?controller=$1&action=$2&id=$3 [L,QSA]
+
+RewriteRule ^([^/]+)/([^/]+) index.php?controller=$1&action=$2 [L,QSA]
+
+RewriteRule ^([^/]+) index.php?controller=$1&action=index [L,QSA]
+
+RewriteRule ^ index.php?controller=default&action=index [L]
+
