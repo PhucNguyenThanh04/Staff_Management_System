@@ -81,5 +81,37 @@ function isDefault()
                 </a>
             </li>
         <?php endif ?>
+        <?php if (checkScope('evaluation')): ?>
+            <li class="menu-item <?=isActive('evaluation')?>">
+                <a href="<?=url('evaluation')?>" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-task"></i>
+                    <div>Đánh giá</div>
+                </a>
+            </li>
+        <?php endif ?>
+        <?php if (checkScope('reward_discipline')): ?>
+            <li class="menu-item <?=isActive('reward-discipline')?>">
+                <a href="<?=url('reward-discipline')?>" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-medal"></i>
+                    <div>Khen thưởng / Kỷ luật</div>
+                </a>
+            </li>
+        <?php endif ?>
+        <?php if (checkScope('asset')): ?>
+            <li class="menu-item <?=isActive('asset')?>">
+                <a href="<?=url('asset')?>" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-laptop"></i>
+                    <div>Tài sản</div>
+                </a>
+            </li>
+        <?php endif ?>
+        <?php if (checkScope('asset_assignment')): ?>
+            <li class="menu-item <?=isActive('asset-assignment')?>">
+                <a href="<?=url('asset-assignment')?>" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-transfer-alt"></i>
+                    <div>Cấp phát tài sản</div>
+                </a>
+            </li>
+        <?php endif ?>
     </ul>
 </aside>

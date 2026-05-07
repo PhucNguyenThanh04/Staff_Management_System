@@ -31,10 +31,18 @@ $employee_scopes = [
         'payroll',
         'payroll_detail',
         'attendance',
+        'evaluation',
+        'reward_discipline',
+        'asset',
+        'asset_assignment'
     ],
     $employee_role_types['nhansu'] => [
         'contract',
         'employee',
+         'evaluation',
+         'reward_discipline',
+         'asset',
+         'asset_assignment'
     ],
     $employee_role_types['ketoan'] => [
         'attendance',
@@ -45,6 +53,8 @@ $employee_scopes = [
         'attendance',
         'payroll',
         'payroll_detail',
+        'evaluation',
+        'reward_discipline'
     ]
 ];
 $contract_types = [

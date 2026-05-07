@@ -266,3 +266,98 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+-- ============================================================
+-- CHỨC NĂNG 8: Đánh giá & Khen thưởng / Kỷ luật
+-- ============================================================
+
+CREATE TABLE `evaluations` (
+                               `id`          int(11) NOT NULL AUTO_INCREMENT,
+                               `employee_id` int(11) NOT NULL COMMENT 'nhân viên được đánh giá',
+                               `reviewer_id` int(11) DEFAULT NULL COMMENT 'người đánh giá (FK employees)',
+                               `eval_type`   tinyint(2) NOT NULL COMMENT '1: tháng, 2: quý, 3: năm',
+                               `period`      varchar(20) NOT NULL COMMENT 'ví dụ: 2025-04, 2025-Q2, 2025',
+                               `eval_date`   date NOT NULL COMMENT 'ngày lập đánh giá',
+                               `score`       decimal(4,2) DEFAULT NULL COMMENT 'điểm tổng (0–10)',
+                               `content`     text DEFAULT NULL COMMENT 'nhận xét chung',
+                               `strengths`   text DEFAULT NULL COMMENT 'điểm mạnh',
+                               `weaknesses`  text DEFAULT NULL COMMENT 'điểm cần cải thiện',
+                               `status`      varchar(20) NOT NULL DEFAULT 'draft'
+                                   COMMENT 'draft | submitted | approved',
+                               `created_at`  timestamp NOT NULL DEFAULT current_timestamp(),
+                               `updated_at`  timestamp NOT NULL DEFAULT current_timestamp()
+                                   ON UPDATE current_timestamp(),
+                               PRIMARY KEY (`id`),
+                               KEY `idx_eval_employee` (`employee_id`),
+                               KEY `idx_eval_period`   (`period`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+CREATE TABLE `rewards_disciplines` (
+                                       `id`           int(11) NOT NULL AUTO_INCREMENT,
+                                       `employee_id`  int(11) NOT NULL COMMENT 'nhân viên liên quan',
+                                       `approved_by`  int(11) DEFAULT NULL COMMENT 'người phê duyệt (FK employees)',
+                                       `rd_type`      tinyint(2) NOT NULL
+                 COMMENT '1: khen thưởng, 2: kỷ luật, 3: cảnh cáo, 4: sáng kiến',
+                                       `title`        varchar(255) NOT NULL COMMENT 'tên khen thưởng / hình thức kỷ luật',
+                                       `reason`       text DEFAULT NULL COMMENT 'lý do / căn cứ',
+                                       `amount`       decimal(12,2) DEFAULT 0.00 COMMENT 'giá trị thưởng (nếu có)',
+                                       `effective_date` date NOT NULL COMMENT 'ngày có hiệu lực',
+                                       `status`       varchar(20) NOT NULL DEFAULT 'pending'
+                                           COMMENT 'pending | approved | rejected',
+                                       `created_at`   timestamp NOT NULL DEFAULT current_timestamp(),
+                                       `updated_at`   timestamp NOT NULL DEFAULT current_timestamp()
+                                           ON UPDATE current_timestamp(),
+                                       PRIMARY KEY (`id`),
+                                       KEY `idx_rd_employee` (`employee_id`),
+                                       KEY `idx_rd_type`     (`rd_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- ============================================================
+-- CHỨC NĂNG 9: Quản lý tài sản cấp phát
+-- ============================================================
+
+CREATE TABLE `assets` (
+                          `id`            int(11) NOT NULL AUTO_INCREMENT,
+                          `code`          varchar(50) NOT NULL UNIQUE COMMENT 'mã tài sản nội bộ',
+                          `name`          varchar(255) NOT NULL COMMENT 'tên tài sản',
+                          `category`      tinyint(2) NOT NULL
+                  COMMENT '1: laptop, 2: điện thoại, 3: thẻ ra vào, 4: khác',
+                          `brand`         varchar(100) DEFAULT NULL COMMENT 'hãng sản xuất',
+                          `model`         varchar(100) DEFAULT NULL COMMENT 'model / phiên bản',
+                          `serial_number` varchar(100) DEFAULT NULL COMMENT 'số serial',
+                          `value`         decimal(15,2) DEFAULT 0.00 COMMENT 'giá trị mua',
+                          `purchase_date` date DEFAULT NULL COMMENT 'ngày mua',
+                          `status`        tinyint(2) NOT NULL DEFAULT 1
+                  COMMENT '1: sẵn sàng, 2: đang cấp phát, 3: bảo trì, 4: thanh lý',
+                          `note`          text DEFAULT NULL,
+                          `created_at`    timestamp NOT NULL DEFAULT current_timestamp(),
+                          `updated_at`    timestamp NOT NULL DEFAULT current_timestamp()
+                              ON UPDATE current_timestamp(),
+                          PRIMARY KEY (`id`),
+                          KEY `idx_asset_status`   (`status`),
+                          KEY `idx_asset_category` (`category`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+CREATE TABLE `asset_assignments` (
+                                     `id`            int(11) NOT NULL AUTO_INCREMENT,
+                                     `asset_id`      int(11) NOT NULL COMMENT 'FK assets',
+                                     `employee_id`   int(11) NOT NULL COMMENT 'FK employees — người nhận',
+                                     `assigned_by`   int(11) DEFAULT NULL COMMENT 'FK employees — người cấp',
+                                     `assign_date`   date NOT NULL COMMENT 'ngày bàn giao',
+                                     `return_date`   date DEFAULT NULL COMMENT 'ngày trả (NULL = đang dùng)',
+                                     `condition_out` tinyint(2) DEFAULT 1
+                  COMMENT 'tình trạng khi cấp: 1: tốt, 2: trung bình, 3: kém',
+                                     `condition_in`  tinyint(2) DEFAULT NULL
+                  COMMENT 'tình trạng khi trả (NULL = chưa trả)',
+                                     `note`          text DEFAULT NULL,
+                                     `created_at`    timestamp NOT NULL DEFAULT current_timestamp(),
+                                     `updated_at`    timestamp NOT NULL DEFAULT current_timestamp()
+                                         ON UPDATE current_timestamp(),
+                                     PRIMARY KEY (`id`),
+                                     KEY `idx_aa_asset`    (`asset_id`),
+                                     KEY `idx_aa_employee` (`employee_id`),
+                                     KEY `idx_aa_active`   (`return_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
