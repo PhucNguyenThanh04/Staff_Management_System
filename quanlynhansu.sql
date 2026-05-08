@@ -361,3 +361,38 @@ CREATE TABLE `asset_assignments` (
                                      KEY `idx_aa_employee` (`employee_id`),
                                      KEY `idx_aa_active`   (`return_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ============================================================
+-- CHỨC NĂNG 10: Quản lý thông báo & truyền thông nội bộ
+-- ============================================================
+
+CREATE TABLE `notifications` (
+                                 `id`           int(11) NOT NULL AUTO_INCREMENT,
+                                 `title`        varchar(255) NOT NULL,
+                                 `content`      text NOT NULL,
+                                 `sender_id`    int(11) NOT NULL COMMENT 'người tạo thông báo',
+                                 `target_type`  tinyint(2) NOT NULL DEFAULT 1
+                     COMMENT '1: toàn bộ, 2: theo role, 3: theo phòng ban, 4: theo nhân viên',
+                                 `target_value` varchar(50) DEFAULT NULL COMMENT 'id role/department/employee tùy target_type',
+                                 `is_pinned`    tinyint(1) NOT NULL DEFAULT 0 COMMENT '0: không ghim, 1: ghim',
+                                 `is_active`    tinyint(1) NOT NULL DEFAULT 1 COMMENT '0: ẩn, 1: hiển thị',
+                                 `created_at`   timestamp NOT NULL DEFAULT current_timestamp(),
+                                 `updated_at`   timestamp NOT NULL DEFAULT current_timestamp()
+                                     ON UPDATE current_timestamp(),
+                                 PRIMARY KEY (`id`),
+                                 KEY `idx_n_target_type` (`target_type`),
+                                 KEY `idx_n_sender` (`sender_id`),
+                                 KEY `idx_n_active` (`is_active`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+CREATE TABLE `notification_reads` (
+                                      `id`              int(11) NOT NULL AUTO_INCREMENT,
+                                      `notification_id` int(11) NOT NULL,
+                                      `employee_id`     int(11) NOT NULL,
+                                      `read_at`         datetime NOT NULL,
+                                      `created_at`      timestamp NOT NULL DEFAULT current_timestamp(),
+                                      PRIMARY KEY (`id`),
+                                      UNIQUE KEY `uniq_notification_employee` (`notification_id`,`employee_id`),
+                                      KEY `idx_nr_employee` (`employee_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

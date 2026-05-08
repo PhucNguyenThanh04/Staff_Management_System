@@ -34,7 +34,8 @@ $employee_scopes = [
         'evaluation',
         'reward_discipline',
         'asset',
-        'asset_assignment'
+        'asset_assignment',
+        'notification'
     ],
     $employee_role_types['nhansu'] => [
         'contract',
@@ -42,19 +43,22 @@ $employee_scopes = [
          'evaluation',
          'reward_discipline',
          'asset',
-         'asset_assignment'
+         'asset_assignment',
+         'notification'
     ],
     $employee_role_types['ketoan'] => [
         'attendance',
         'payroll',
         'payroll_detail',
+        'notification'
     ],
     $employee_role_types['nhanvien'] => [
         'attendance',
         'payroll',
         'payroll_detail',
         'evaluation',
-        'reward_discipline'
+        'reward_discipline',
+        'notification'
     ]
 ];
 $contract_types = [

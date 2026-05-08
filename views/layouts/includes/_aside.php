@@ -49,6 +49,14 @@ function isDefault()
                 </a>
             </li>
         <?php endif ?>
+        <?php if (checkScope('notification')): ?>
+            <li class="menu-item <?=isActive('notification')?>">
+                <a href="<?=url('notification')?>" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-bell"></i>
+                    <div><?= LanguageHelper::trans('common.notification') ?></div>
+                </a>
+            </li>
+        <?php endif ?>
         <?php if (checkScope('payroll')): ?>
             <li class="menu-item <?=isActive('payroll')?>">
                 <a href="<?=url('payroll')?>" class="menu-link">
