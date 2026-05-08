@@ -75,6 +75,11 @@ class NotificationController extends Controller
         }
         if ($targetType == 1) {
             $targetValue = null;
+        } else {
+            if (!is_numeric($targetValue)) {
+                throw new Exception(LanguageHelper::trans('notification.validate_target_value'));
+            }
+            $targetValue = strval(intval($targetValue));
         }
 
         return [
@@ -227,10 +232,11 @@ class NotificationController extends Controller
             $userId = intval($user['id']);
 
             $visibilityCondition = $this->visibilityCondition($user);
+            $activeCondition = $this->canManageNotifications() ? "1=1" : "n.is_active = 1";
             $found = $this->model->getFirst("
                 SELECT n.id
                 FROM notifications n
-                WHERE n.id = $notificationId AND $visibilityCondition
+                WHERE n.id = $notificationId AND $visibilityCondition AND $activeCondition
             ");
             if (!$found) {
                 throw new Exception(LanguageHelper::trans('notification.not_found'));
@@ -256,4 +262,3 @@ class NotificationController extends Controller
         }
     }
 }
-

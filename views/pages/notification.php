@@ -362,14 +362,14 @@ if (canManage) {
                 $('#notification_target_role').val(dataModel.target_value || '');
             }
             if (parseInt(dataModel.target_type) === 3) {
-                const label = dataModel.target_department_name || '';
-                if (dataModel.target_value && label) {
+                const label = dataModel.target_department_name || (`#${dataModel.target_value}`);
+                if (dataModel.target_value) {
                     $('#notification_target_department').html(`<option value="${dataModel.target_value}" selected>${label}</option>`).trigger('change');
                 }
             }
             if (parseInt(dataModel.target_type) === 4) {
-                const label = dataModel.target_employee_name || '';
-                if (dataModel.target_value && label) {
+                const label = dataModel.target_employee_name || (`#${dataModel.target_value}`);
+                if (dataModel.target_value) {
                     $('#notification_target_employee').html(`<option value="${dataModel.target_value}" selected>${label}</option>`).trigger('change');
                 }
             }
